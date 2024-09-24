@@ -109,13 +109,13 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
         className="flex-1 border border-grey rounded-lg p-2 font-pmedium"
       />
 
-      {!message?.length ? (
-        <TouchableOpacity onPress={onListen}>
-          <FontAwesome6 name="headphones-simple" size={28} color="grey" />
-        </TouchableOpacity>
-      ) : (
+      {message?.length ? (
         <TouchableOpacity onPress={onSend}>
           <Feather name="arrow-up-circle" size={28} color="grey" />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={onListen}>
+          <FontAwesome6 name="headphones-simple" size={28} color="grey" />
         </TouchableOpacity>
       )}
     </View>
