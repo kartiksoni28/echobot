@@ -66,7 +66,7 @@ const InitialLayout = () => {
     console.log(`_layout-66`, isSignedIn);
     if (isSignedIn && !inAuthGroup) {
       //add the desired route here
-      router.replace("/(auth)");
+      router.replace("/(auth)/(drawer)/(chat)/new");
     } else if (!isSignedIn && inAuthGroup) {
       // add the login/signup route here
       router.replace("/");
@@ -92,7 +92,7 @@ const InitialLayout = () => {
         name="login"
         options={{ headerShown: false, presentation: "modal" }}
       />
-      <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)/layout" options={{ headerShown: false }} />
     </Stack>
   );
 };

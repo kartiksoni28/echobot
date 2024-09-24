@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useAuth } from "@clerk/clerk-expo";
 
-const index = () => {
+const NewChat = () => {
   const { signOut, isSignedIn } = useAuth();
   console.log(`index-7`, isSignedIn);
   return (
@@ -12,6 +12,6 @@ const index = () => {
   );
 };
 
-export default index;
+export default NewChat;
 
 const styles = StyleSheet.create({});
