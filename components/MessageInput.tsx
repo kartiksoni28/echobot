@@ -77,7 +77,7 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
   const onListen = () => {};
   return (
     <View
-      className="flex-row justify-center items-center space-x-1 px-2"
+      className="flex-row justify-center items-center space-x-1 px-2 py-2"
       style={{ marginBottom: 5 }}
     >
       <ATouchableOpacity

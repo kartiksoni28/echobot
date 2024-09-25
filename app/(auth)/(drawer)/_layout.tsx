@@ -13,16 +13,16 @@ import { Link, useNavigation } from "expo-router";
 import { Entypo, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
 
-export const CustomDrawerContent2 = (props: any) => {
-  // const { bottom, top } = useSafeAreaInsets();        can be used too
+const CustomDrawerContent = (props: any) => {
+  const { bottom, top } = useSafeAreaInsets();
   return (
-    <View className="flex-1" style={{ marginTop: 15 }}>
+    <View className="flex-1" style={{ marginTop: top }}>
       <View className="#fff">
         <View className="bg-input justify-center items-center flex-row mx-3 h-10 rounded-lg p-2 space-x-2 mb-3">
           <Ionicons name="search" size={24} color="#fff" />
@@ -59,7 +59,7 @@ const DrawerLayout = () => {
   const dimensions = useWindowDimensions();
   return (
     <Drawer
-      drawerContent={CustomDrawerContent2}
+      drawerContent={CustomDrawerContent}
       screenOptions={{
         headerLeft: () => (
           <TouchableOpacity
@@ -86,7 +86,6 @@ const DrawerLayout = () => {
     >
       <Drawer.Screen
         name="(chat)/new"
-        getId={() => Math.random().toString()}
         options={{
           title: "Echo Bot",
           drawerIcon: () => (
@@ -108,7 +107,6 @@ const DrawerLayout = () => {
       />
       <Drawer.Screen
         name="dalle"
-        getId={() => Math.random().toString()}
         options={{
           title: "DALL·E",
           drawerIcon: () => (
@@ -121,7 +119,6 @@ const DrawerLayout = () => {
       />
       <Drawer.Screen
         name="explore"
-        getId={() => Math.random().toString()}
         options={{
           title: "Explore BOTs",
           drawerIcon: () => (

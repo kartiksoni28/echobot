@@ -63,7 +63,7 @@ const InitialLayout = () => {
     if (!isLoaded) return;
 
     const inAuthGroup = segments[0] === "(auth)";
-    console.log(`_layout-66`, isSignedIn);
+
     if (isSignedIn && !inAuthGroup) {
       //add the desired route here
       router.replace("/(auth)/(drawer)/(chat)/new");
@@ -92,7 +92,7 @@ const InitialLayout = () => {
         name="login"
         options={{ headerShown: false, presentation: "modal" }}
       />
-      <Stack.Screen name="(auth)/layout" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
     </Stack>
   );
 };

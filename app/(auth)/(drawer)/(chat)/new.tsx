@@ -6,95 +6,33 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Message, Role } from "@/utils/Interfaces";
 import { FlashList } from "@shopify/flash-list";
 import ChatMessage from "@/components/ChatMessage";
+import { useMMKVString } from "react-native-mmkv";
+import { Storage } from "@/utils/Storage";
+import { Redirect } from "expo-router";
 
-const DUMMY: Message[] = [
-  {
-    content: "Hello, How can I help you today",
-    role: Role.Bot,
-  },
-  {
-    content: "I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-  {
-    content: "Hello, Hfl;kjsdlfkdskl",
-    role: Role.Bot,
-  },
-  {
-    content:
-      "I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app.I need help with my react native app",
-    role: Role.User,
-  },
-];
+// const DUMMY: Message[] = [
+//   {
+//     content: "Hello, How can I help you today",
+//     role: Role.Bot,
+//   },
+//   {
+//     content: "I need help with my react native app",
+//     role: Role.User,
+//   },
+// ];
 
 const NewChat = () => {
-  const [messages, setMessages] = useState<Message[]>(DUMMY);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [key, setKey] = useMMKVString("apiKey", Storage);
+  const [organization, setOrganization] = useMMKVString("org", Storage);
+
   const getCompletion = (message: string) => {
     console.log(`new-10`, message);
   };
+
+  if (!key || key === "" || !organization || organization === "") {
+    return <Redirect href={"/(auth)/(modal)/settings"} />;
+  }
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1">
