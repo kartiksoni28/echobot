@@ -66,7 +66,7 @@ const InitialLayout = () => {
 
     if (isSignedIn && !inAuthGroup) {
       //add the desired route here
-      router.replace("/(auth)/(drawer)/(chat)/new");
+      router.push("/(auth)/(drawer)/(chat)/new");
     } else if (!isSignedIn && inAuthGroup) {
       // add the login/signup route here
       router.replace("/");

@@ -17,7 +17,7 @@ const PredefinedMessages = [
 ];
 
 type Props = {
-  onSelectCard: (message: string) => void;
+  onSelectCard: (message: string, mode: string) => void;
 };
 const MessageIdeas = ({ onSelectCard }: Props) => {
   return (
@@ -35,7 +35,9 @@ const MessageIdeas = ({ onSelectCard }: Props) => {
           return (
             <TouchableOpacity
               key={index}
-              onPress={() => onSelectCard(`${item?.title} ${item?.text}`)}
+              onPress={() =>
+                onSelectCard(`${item?.title} ${item?.text}`, "text")
+              }
               className="flex-1 bg-input p-2 rounded-lg"
             >
               <Text className="text-black font-psemibold text-md">

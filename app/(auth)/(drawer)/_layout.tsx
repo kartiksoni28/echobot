@@ -109,6 +109,7 @@ const DrawerLayout = () => {
         name="dalle"
         options={{
           title: "DALL·E",
+          headerTitleAlign: "center",
           drawerIcon: () => (
             <Image
               source={require("../../../assets/images/dalle.png")}

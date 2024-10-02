@@ -7,20 +7,38 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome6,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 // import * as DocumentPicker from "expo-document-picker";
 // import * as ImagePicker from "expo-image-picker";
 import Colors from "@/constants/Colors";
+// import * as Haptics from "expo-haptics";
+import { Audio } from "expo-av";
+// import { AndroidAudioEncoder, AndroidOutputFormat } from "expo-av/build/Audio";
+import { sendAudioToServer } from "@/utils/helpers";
 
 export type MessageInputProps = {
   onShouldSendMessage: (message: string) => void;
+  textLoading: boolean;
 };
 
 const ATouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
+const MessageInput = ({
+  onShouldSendMessage,
+  textLoading,
+}: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const expanded = useSharedValue(0);
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [recording, setRecording] = useState<Audio.Recording | undefined>(
+    undefined
+  );
+  const [speechCapturing, setSpeechCapturing] = useState(false);
 
   const expandItems = () => {
     console.log(`MessageInput-26`);
@@ -74,7 +92,50 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
     setMessage("");
   };
 
-  const onListen = () => {};
+  const onStartListing = async () => {
+    setSpeechCapturing(true);
+    //listing the mic
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    try {
+      if (permissionResponse?.status !== "granted") {
+        console.log("Requesting permission..");
+        await requestPermission();
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log("Starting recording..");
+
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Failed to start recording", err);
+    }
+  };
+
+  const onStopListing = async () => {
+    setSpeechCapturing(false);
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    console.log("Stopping recording..");
+    if (recording) {
+      setRecording(undefined);
+      await recording.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
+      const uri = recording.getURI();
+      console.log("Recording stopped and stored at", uri);
+      if (uri) {
+        const res = await sendAudioToServer(uri);
+        onShouldSendMessage(res?.transcribed_text);
+      }
+    }
+  };
   return (
     <View
       className="flex-row justify-center items-center space-x-1 px-2 py-2"
@@ -108,13 +169,22 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
         onFocus={collapseItems}
         className="flex-1 border border-grey rounded-lg p-2 font-pmedium"
       />
-
-      {message?.length ? (
+      {textLoading ? (
+        <Ionicons name="stop-circle-outline" size={28} color="grey" />
+      ) : message?.length ? (
         <TouchableOpacity onPress={onSend}>
           <Feather name="arrow-up-circle" size={28} color="grey" />
         </TouchableOpacity>
+      ) : speechCapturing ? (
+        <TouchableOpacity onPress={onStopListing}>
+          <MaterialCommunityIcons
+            name="headphones-off"
+            size={28}
+            color="grey"
+          />
+        </TouchableOpacity>
       ) : (
-        <TouchableOpacity onPress={onListen}>
+        <TouchableOpacity onPress={onStartListing}>
           <FontAwesome6 name="headphones-simple" size={28} color="grey" />
         </TouchableOpacity>
       )}

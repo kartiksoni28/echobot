@@ -14,8 +14,6 @@ const settings = () => {
   const [key, setKey] = useMMKVString("apiKey", Storage);
   const [organization, setOrganization] = useMMKVString("org", Storage);
 
-  console.log(`settings-17`, key);
-
   const { signOut } = useAuth();
 
   const handleRemoveAPI = () => {
